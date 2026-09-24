@@ -1,7 +1,8 @@
 [package]
 name = "podman-healthcheckd"
 version = "0.1.3"
-edition = "2021"
+edition = "2024"
+rust-version = "1.88"
 license = "MIT"
 authors = ["Franz Geffke <mail@gofranz.com>"]
 description = "Podman healthcheck scheduler for systems without systemd"

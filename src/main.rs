@@ -297,10 +297,10 @@ async fn watch_events_inner(
                             _ => None,
                         };
 
-                        if let Some(a) = action {
-                            if tx.send(a).await.is_err() {
-                                break;
-                            }
+                        if let Some(a) = action
+                            && tx.send(a).await.is_err()
+                        {
+                            break;
                         }
                     }
                     None => break,
