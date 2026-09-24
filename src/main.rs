@@ -80,8 +80,7 @@ async fn podman_ps() -> Result<Vec<PsEntry>, String> {
         return Ok(Vec::new());
     }
 
-    serde_json::from_str(&stdout)
-        .map_err(|e| format!("failed to parse podman ps output: {e}"))
+    serde_json::from_str(&stdout).map_err(|e| format!("failed to parse podman ps output: {e}"))
 }
 
 async fn get_healthcheck(id: &str) -> Option<HealthcheckConfig> {
@@ -97,8 +96,7 @@ async fn get_healthcheck(id: &str) -> Option<HealthcheckConfig> {
         );
         return None;
     }
-    let results: Vec<InspectResult> =
-        serde_json::from_slice(&output.stdout).ok()?;
+    let results: Vec<InspectResult> = serde_json::from_slice(&output.stdout).ok()?;
     let hc = results.into_iter().next()?.config.healthcheck?;
     // Skip containers where healthcheck is just ["NONE"]
     if hc.test.first().map(|s| s.as_str()) == Some("NONE") {
@@ -193,7 +191,8 @@ impl TaskManager {
             Some(c) => c,
             None => return,
         };
-        info!("[{name}] scheduling healthcheck (interval={:.1?}, start_period={:.1?}, retries={})",
+        info!(
+            "[{name}] scheduling healthcheck (interval={:.1?}, start_period={:.1?}, retries={})",
             ns_to_duration(config.interval),
             Duration::from_nanos(config.start_period),
             config.retries,
@@ -263,13 +262,7 @@ async fn watch_events_inner(
     token: &CancellationToken,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let mut child = Command::new("podman")
-        .args([
-            "events",
-            "--format",
-            "json",
-            "--filter",
-            "type=container",
-        ])
+        .args(["events", "--format", "json", "--filter", "type=container"])
         .stdout(std::process::Stdio::piped())
         .stderr(std::process::Stdio::null())
         .spawn()?;
@@ -378,9 +371,8 @@ async fn main() {
 
     enumerate_existing(&mut manager).await;
 
-    let mut sigterm =
-        tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
-            .expect("failed to register SIGTERM handler");
+    let mut sigterm = tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
+        .expect("failed to register SIGTERM handler");
 
     loop {
         tokio::select! {
