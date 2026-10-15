@@ -1,0 +1,18 @@
+#!/bin/sh
+# Safety net: remove any of our symlinks the pre-deinstall hook missed, e.g.
+# when install scripts were skipped. Deliberately self-contained (package
+# files are already gone at this point) and only touches symlinks that point
+# into our own services directory.
+for p in \
+	/etc/init.d/podman-healthcheckd \
+	/etc/conf.d/podman-healthcheckd \
+	/etc/sv/podman-healthcheckd \
+	/etc/dinit.d/podman-healthcheckd
+do
+	[ -L "$p" ] || continue
+	case "$(readlink "$p")" in
+		/usr/share/podman-healthcheckd/services/*) rm -f "$p" ;;
+	esac
+done
+
+exit 0

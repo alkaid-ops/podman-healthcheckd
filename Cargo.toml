@@ -31,6 +31,7 @@ assets = [
 [package.metadata.generate-rpm]
 post_install_script = "packaging/rpm/post.sh"
 pre_uninstall_script = "packaging/rpm/preun.sh"
+post_uninstall_script = "packaging/rpm/postun.sh"
 assets = [
     { source = "target/release/podman-healthcheckd", dest = "/usr/bin/podman-healthcheckd", mode = "755" },
     { source = "packaging/scripts/detect-init.sh", dest = "/usr/share/podman-healthcheckd/detect-init.sh", mode = "755" },

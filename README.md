@@ -60,10 +60,8 @@ Log levels: `error`, `warn`, `info`, `debug`, `trace` (via `RUST_LOG`).
 
 The packages ship service definitions for the common non-systemd inits, but
 they never enable or start anything — that is your choice. The definitions live
-in `/usr/share/podman-healthcheckd/services/`; on the Debian and RPM packages the
-matching one is symlinked into place at install time based on the detected init.
-The Alpine package pulls in the matching `-openrc`/`-runit`/`-dinit` subpackage
-automatically.
+in `/usr/share/podman-healthcheckd/services/` and the matching one is symlinked
+into place at install time based on the detected init.
 
 OpenRC:
 

@@ -76,6 +76,8 @@ unlink_own() {
 }
 
 do_install() {
+	# Drop links from a previous init first, so switching is a single step.
+	do_remove
 	case "$(detect_init)" in
 		openrc)
 			link "$SERVICES_DIR/openrc/podman-healthcheckd.initd" "$INITD"

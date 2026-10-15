@@ -1,0 +1,9 @@
+#!/bin/sh
+# Wire the service definition for the detected init into place.
+# Never enables or starts anything: that is the administrator's choice.
+SCRIPT=/usr/share/podman-healthcheckd/detect-init.sh
+if [ -x "$SCRIPT" ]; then
+	"$SCRIPT" install || :
+fi
+
+exit 0

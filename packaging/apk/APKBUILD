@@ -9,19 +9,11 @@ license="MIT"
 depends=""
 makedepends=""
 source=""
-subpackages="
-	$pkgname-openrc:openrc:noarch
-	$pkgname-runit:runit:noarch
-	$pkgname-dinit:dinit:noarch
-"
+install="$pkgname.post-install $pkgname.pre-deinstall $pkgname.post-deinstall"
 options="!check"
 
-# Shared service definitions (see packaging/services/). abuild sets $startdir
-# to this directory, so its sibling holds the definitions.
-SERVICES="$startdir/../services"
-
 # The musl binary is built by CI and copied next to this APKBUILD, so this
-# recipe only assembles the packages instead of compiling from source.
+# recipe only assembles the package instead of compiling from source.
 build() {
 	:
 }
@@ -30,30 +22,13 @@ package() {
 	install -Dm755 "$startdir/podman-healthcheckd" \
 		"$pkgdir/usr/bin/podman-healthcheckd"
 
-	install -Dm755 "$SERVICES/openrc/podman-healthcheckd.initd" \
-		"$pkgdir/etc/init.d/podman-healthcheckd"
-	install -Dm644 "$SERVICES/openrc/podman-healthcheckd.confd" \
-		"$pkgdir/etc/conf.d/podman-healthcheckd"
-	install -Dm755 "$SERVICES/runit/podman-healthcheckd/run" \
-		"$pkgdir/etc/sv/podman-healthcheckd/run"
-	install -Dm644 "$SERVICES/dinit/podman-healthcheckd" \
-		"$pkgdir/etc/dinit.d/podman-healthcheckd"
-}
-
-openrc() {
-	depends="$pkgname"
-	install_if="$pkgname=$pkgver-r$pkgrel openrc"
-	amove etc/init.d/podman-healthcheckd etc/conf.d/podman-healthcheckd
-}
-
-runit() {
-	depends="$pkgname"
-	install_if="$pkgname=$pkgver-r$pkgrel runit"
-	amove etc/sv/podman-healthcheckd
-}
-
-dinit() {
-	depends="$pkgname"
-	install_if="$pkgname=$pkgver-r$pkgrel dinit"
-	amove etc/dinit.d/podman-healthcheckd
+	# The service definitions stay under /usr/share and are symlinked into
+	# place by detect-init.sh depending on the init system that is present
+	# (see packaging/services/). They remain apk-owned files, so upgrades,
+	# verification and removal work normally; only the symlink is created
+	# at install time.
+	install -Dm755 "$startdir/../scripts/detect-init.sh" \
+		"$pkgdir/usr/share/podman-healthcheckd/detect-init.sh"
+	cp -R "$startdir/../services" \
+		"$pkgdir/usr/share/podman-healthcheckd/"
 }

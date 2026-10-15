@@ -1,0 +1,8 @@
+#!/bin/sh
+# Remove the symlink we created at install time (package files still exist).
+SCRIPT=/usr/share/podman-healthcheckd/detect-init.sh
+if [ -x "$SCRIPT" ]; then
+	"$SCRIPT" remove || :
+fi
+
+exit 0
