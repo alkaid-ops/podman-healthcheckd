@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+
+name="podman-healthcheckd"
+description="Podman healthcheck scheduler for systems without systemd"
+
+command="/usr/bin/podman-healthcheckd"
+command_background=true
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/${RC_SVCNAME}.log"
+error_log="/var/log/${RC_SVCNAME}.log"
+
+depend() {
+	use logger
+}
+
+start_pre() {
+	export RUST_LOG="${RUST_LOG:-info}"
+	checkpath --file --mode 0644 "$output_log"
+}

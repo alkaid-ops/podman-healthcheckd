@@ -1,0 +1,3 @@
+# Log level for podman-healthcheckd, passed through as RUST_LOG.
+# One of: error, warn, info, debug, trace
+RUST_LOG="info"

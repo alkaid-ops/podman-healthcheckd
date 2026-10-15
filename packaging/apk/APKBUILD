@@ -9,6 +9,7 @@ license="MIT"
 depends=""
 makedepends=""
 source=""
+subpackages="$pkgname-openrc"
 options="!check"
 
 # The musl binary is built by CI and copied next to this APKBUILD, so this
@@ -20,4 +21,14 @@ build() {
 package() {
 	install -Dm755 "$startdir/podman-healthcheckd" \
 		"$pkgdir/usr/bin/podman-healthcheckd"
+	install -Dm755 "$startdir/podman-healthcheckd.openrc" \
+		"$pkgdir/etc/init.d/podman-healthcheckd"
+	install -Dm644 "$startdir/podman-healthcheckd.confd" \
+		"$pkgdir/etc/conf.d/podman-healthcheckd"
+}
+
+openrc() {
+	depends="$pkgname"
+	install_if="$pkgname=$pkgver-r$pkgrel openrc"
+	amove etc/init.d/podman-healthcheckd etc/conf.d/podman-healthcheckd
 }
