@@ -1,0 +1,4 @@
+#!/bin/sh
+export RUST_LOG="${RUST_LOG:-info}"
+exec 2>&1
+exec /usr/bin/podman-healthcheckd

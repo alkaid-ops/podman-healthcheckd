@@ -56,6 +56,52 @@ RUST_LOG=info ./target/release/podman-healthcheckd
 
 Log levels: `error`, `warn`, `info`, `debug`, `trace` (via `RUST_LOG`).
 
+## Running as a service
+
+The packages ship service definitions for the common non-systemd inits, but
+they never enable or start anything — that is your choice. The definitions live
+in `/usr/share/podman-healthcheckd/services/`; on the Debian and RPM packages the
+matching one is symlinked into place at install time based on the detected init.
+The Alpine package pulls in the matching `-openrc`/`-runit`/`-dinit` subpackage
+automatically.
+
+OpenRC:
+
+```sh
+rc-update add podman-healthcheckd default   # enable at boot
+rc-service podman-healthcheckd start
+```
+
+runit (enabling also starts it):
+
+```sh
+ln -s /etc/sv/podman-healthcheckd /var/service/
+sv status podman-healthcheckd
+```
+
+dinit:
+
+```sh
+dinitctl enable podman-healthcheckd
+dinitctl start podman-healthcheckd
+```
+
+SysVinit (Devuan, antiX, MX, ...):
+
+```sh
+update-rc.d podman-healthcheckd defaults    # enable at boot
+service podman-healthcheckd start
+```
+
+s6 definitions are provided under `services/s6/` but not wired up automatically,
+because the s6 service directory differs between distributions.
+
+On a systemd system no service is installed — run the daemon directly:
+
+```sh
+RUST_LOG=info podman-healthcheckd
+```
+
 ## License
 
 MIT

@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+# Only clean up on real removal, not on upgrade (prerm upgrade).
+SCRIPT=/usr/share/podman-healthcheckd/detect-init.sh
+case "${1:-}" in
+	remove)
+		if [ -x "$SCRIPT" ]; then
+			"$SCRIPT" remove || true
+		fi
+		;;
+esac
+
+exit 0

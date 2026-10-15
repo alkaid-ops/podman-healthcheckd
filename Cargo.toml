@@ -15,13 +15,32 @@ path = "src/main.rs"
 [package.metadata.deb]
 maintainer = "Franz Geffke <mail@gofranz.com>"
 section = "utils"
+maintainer-scripts = "packaging/deb/maintainer-scripts"
 assets = [
     ["target/release/podman-healthcheckd", "usr/bin/", "755"],
+    ["packaging/scripts/detect-init.sh", "usr/share/podman-healthcheckd/", "755"],
+    ["packaging/services/sysvinit/podman-healthcheckd", "usr/share/podman-healthcheckd/services/sysvinit/", "755"],
+    ["packaging/services/openrc/podman-healthcheckd.initd", "usr/share/podman-healthcheckd/services/openrc/", "755"],
+    ["packaging/services/openrc/podman-healthcheckd.confd", "usr/share/podman-healthcheckd/services/openrc/", "644"],
+    ["packaging/services/runit/podman-healthcheckd/run", "usr/share/podman-healthcheckd/services/runit/podman-healthcheckd/", "755"],
+    ["packaging/services/dinit/podman-healthcheckd", "usr/share/podman-healthcheckd/services/dinit/", "644"],
+    ["packaging/services/s6/podman-healthcheckd/type", "usr/share/podman-healthcheckd/services/s6/podman-healthcheckd/", "644"],
+    ["packaging/services/s6/podman-healthcheckd/run", "usr/share/podman-healthcheckd/services/s6/podman-healthcheckd/", "755"],
 ]
 
 [package.metadata.generate-rpm]
+post_install_script = "packaging/rpm/post.sh"
+pre_uninstall_script = "packaging/rpm/preun.sh"
 assets = [
     { source = "target/release/podman-healthcheckd", dest = "/usr/bin/podman-healthcheckd", mode = "755" },
+    { source = "packaging/scripts/detect-init.sh", dest = "/usr/share/podman-healthcheckd/detect-init.sh", mode = "755" },
+    { source = "packaging/services/sysvinit/podman-healthcheckd", dest = "/usr/share/podman-healthcheckd/services/sysvinit/podman-healthcheckd", mode = "755" },
+    { source = "packaging/services/openrc/podman-healthcheckd.initd", dest = "/usr/share/podman-healthcheckd/services/openrc/podman-healthcheckd.initd", mode = "755" },
+    { source = "packaging/services/openrc/podman-healthcheckd.confd", dest = "/usr/share/podman-healthcheckd/services/openrc/podman-healthcheckd.confd", mode = "644" },
+    { source = "packaging/services/runit/podman-healthcheckd/run", dest = "/usr/share/podman-healthcheckd/services/runit/podman-healthcheckd/run", mode = "755" },
+    { source = "packaging/services/dinit/podman-healthcheckd", dest = "/usr/share/podman-healthcheckd/services/dinit/podman-healthcheckd", mode = "644" },
+    { source = "packaging/services/s6/podman-healthcheckd/type", dest = "/usr/share/podman-healthcheckd/services/s6/podman-healthcheckd/type", mode = "644" },
+    { source = "packaging/services/s6/podman-healthcheckd/run", dest = "/usr/share/podman-healthcheckd/services/s6/podman-healthcheckd/run", mode = "755" },
 ]
 
 [dependencies]
