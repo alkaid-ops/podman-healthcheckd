@@ -1,0 +1,23 @@
+# Maintainer: Franz Geffke <mail@gofranz.com>
+pkgname=podman-healthcheckd
+pkgver=0.1.4
+pkgrel=0
+pkgdesc="Podman healthcheck scheduler for systems without systemd"
+url="https://github.com/alkaid-ops/podman-healthcheckd"
+arch="x86_64"
+license="MIT"
+depends=""
+makedepends=""
+source=""
+options="!check"
+
+# The musl binary is built by CI and copied next to this APKBUILD, so this
+# recipe only assembles the package instead of compiling from source.
+build() {
+	:
+}
+
+package() {
+	install -Dm755 "$startdir/podman-healthcheckd" \
+		"$pkgdir/usr/bin/podman-healthcheckd"
+}
