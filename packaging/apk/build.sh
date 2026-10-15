@@ -64,6 +64,10 @@ fi
 
 chown -R builder:builder /home/builder/.abuild
 
+# Trust our own public key: abuild builds a repository index at the end and
+# `apk index` refuses to read a package whose signature is untrusted.
+install -Dm644 "/home/builder/.abuild/$KEY_NAME.pub" "/etc/apk/keys/$KEY_NAME.pub"
+
 # Stage the prebuilt binary and stamp the version into the recipe.
 cp "$BIN" "$PKGDIR/podman-healthcheckd"
 sed -i "s/^pkgver=.*/pkgver=$VERSION/" "$PKGDIR/APKBUILD"
