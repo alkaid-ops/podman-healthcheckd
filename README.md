@@ -25,9 +25,12 @@ The daemon only acts as a clock — `podman healthcheck run` handles retries, fa
 | Cargo | `cargo install podman-healthcheckd` |
 | Debian/Ubuntu | Download [`.deb`](https://github.com/franzos/podman-healthcheckd/releases) — `sudo dpkg -i podman-healthcheckd_*_amd64.deb` |
 | Fedora/RHEL | Download [`.rpm`](https://github.com/franzos/podman-healthcheckd/releases) — `sudo rpm -i podman-healthcheckd-*.x86_64.rpm` |
+| Alpine | Download [`.apk`](https://github.com/franzos/podman-healthcheckd/releases) — `sudo apk add --allow-untrusted podman-healthcheckd-*.apk` |
 | Guix | `guix install -L <panther> podman-healthcheckd` ([Panther channel](https://github.com/franzos/panther)) |
 
 Pre-built binaries for Linux (x86_64) on [GitHub Releases](https://github.com/franzos/podman-healthcheckd/releases).
+
+Alpine packages are signed with a release key. To verify the signature instead of using `--allow-untrusted`, copy the release's `podman-healthcheckd.rsa.pub` into `/etc/apk/keys` before installing.
 
 ### Guix service
 

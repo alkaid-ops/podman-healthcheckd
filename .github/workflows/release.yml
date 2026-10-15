@@ -92,9 +92,11 @@ jobs:
       - name: Build apk package
         env:
           VERSION: ${{ github.ref_name }}
+          APK_PRIVKEY: ${{ secrets.APK_PRIVKEY }}
         run: |
           docker run --rm \
             -e VERSION \
+            -e APK_PRIVKEY \
             -v "$PWD:/src" \
             -w /src \
             alpine:latest \
@@ -104,7 +106,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: podman-healthcheckd-apk
-          path: "*.apk"
+          path: |
+            *.apk
+            *.rsa.pub
 
   release:
     needs: [build, deb, rpm, apk]
@@ -126,3 +130,4 @@ jobs:
             *.deb
             *.rpm
             *.apk
+            *.rsa.pub
